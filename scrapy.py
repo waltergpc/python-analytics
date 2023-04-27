@@ -20,16 +20,13 @@ for players in tr_list:
     player_params = players.select("td")[0].a["href"]
     temp_player_stats = requests.get(base_url + player_params)
     temp_soup_stats = bs(temp_player_stats.text, "html.parser")
-    print(temp_soup_stats.select(".nfl-c-player-header"))
 
-    # print(
-    #     players.select("td")[0].a.string,
-    #     list(
-    #         map(
-    #             lambda x: x.string,
-    #             temp_soup_stats.select(
-    #                 "#main-content > section:nth-child(5) > div > div.d3-l-col__col-8 > section > div > div > div > section > div > div.d3-l-col__col-12.nfl-c-player-info__content"
-    #             ),
-    #         )
-    #     ),
-    # )
+    print(
+        players.select("td")[0].a.string,
+        list(
+            map(
+                lambda x: x.string,
+                temp_soup_stats.select(".nfl-c-player-unsupported-browsers"),
+            )
+        ),
+    )
