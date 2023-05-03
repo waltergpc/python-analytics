@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import figure
 import numpy as np
 import pandas as pd
+from plotnine import *
 
 
 ff1.Cache.enable_cache("cache")
@@ -17,19 +18,18 @@ driver_1 = "PER"
 
 laps_driver_1 = baku_r_2023.laps.pick_driver(driver_1)
 
-print(laps_driver_1)
+telemetry = laps_driver_1.get_telemetry()
 
 fastest_driver_1 = laps_driver_1.pick_fastest()
 
-print(fastest_driver_1)
+fastest_telemetry = fastest_driver_1.get_telemetry().add_distance()
 
+telemetry_df = pd.DataFrame.from_dict(fastest_telemetry)
 
-telemetry_driver_1 = fastest_driver_1.get_telemetry().add_distance()
+print(fastest_telemetry["DRS"])
 
-team_driver_1 = fastest_driver_1["Team"]
+print(telemetry_df.columns)
 
+plt1 = ggplot(telemetry_df, aes(x="X", y="Y")) + geom_point()
 
-# plot_size = [15, 15]
-# plot_title = f"{bahrain_r_2023.event.year} {bahrain_r_2023.event.EventName} - {bahrain_r_2023.name} - {driver_1} VS {driver_2}"
-# plot_ratios = [1, 3, 2, 1, 1, 2, 1]
-# plot_filename = plot_title.replace(" ", "") + ".png"
+ggsave(filename="plot1.png", plot=plt1)
