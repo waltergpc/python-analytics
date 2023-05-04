@@ -6,6 +6,7 @@ from matplotlib.pyplot import figure
 import numpy as np
 import pandas as pd
 from plotnine import *
+from plotnine.animation import PlotnineAnimation
 
 
 ff1.Cache.enable_cache("cache")
@@ -26,10 +27,15 @@ fastest_telemetry = fastest_driver_1.get_telemetry().add_distance()
 
 telemetry_df = pd.DataFrame.from_dict(fastest_telemetry)
 
-print(fastest_telemetry["DRS"])
-
 print(telemetry_df.columns)
 
-plt1 = ggplot(telemetry_df, aes(x="X", y="Y")) + geom_point()
+plots = list()
 
-ggsave(filename="plot1.png", plot=plt1)
+for index, row in telemetry_df.iterrows():
+    current_frame = pd.DataFrame(row)
+    print(current_frame.axes)
+    plots.append(current_frame.columns)
+
+print(plots[0].columns)
+
+plt1 = ggplot(telemetry_df, aes(x="X", y="Y")) + geom_point()
