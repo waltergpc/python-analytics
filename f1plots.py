@@ -27,15 +27,39 @@ fastest_telemetry = fastest_driver_1.get_telemetry().add_distance()
 
 telemetry_df = pd.DataFrame.from_dict(fastest_telemetry)
 
-print(telemetry_df.columns)
+max_x_value = telemetry_df["X"].max()
+min_x_value = telemetry_df["X"].min()
+max_y_value = telemetry_df["Y"].max()
+min_y_value = telemetry_df["Y"].min()
+
 
 plots = list()
 
 for index, row in telemetry_df.iterrows():
-    current_frame = pd.DataFrame(row)
-    print(current_frame.axes)
-    plots.append(current_frame.columns)
+    test_data = row.to_frame()
+    data_from_s = {
+        "Speed": [row["Speed"]],
+        "nGear": [row["nGear"]],
+        "Throttle": [row["Throttle"]],
+        "Brake": [row["Brake"]],
+        "DRS": [row["DRS"]],
+        "X": [row["X"]],
+        "Y": [row["Y"]],
+        "Z": [row["Z"]],
+    }
 
-print(plots[0].columns)
+    new_frame = pd.DataFrame(data=data_from_s)
+
+    current_plot = (
+        ggplot(new_frame, aes(x="X", y="Y"))
+        + geom_point()
+        + xlim(min_x_value, max_x_value)
+        + ylim(min_y_value, max_y_value)
+    )
+    plots.append(current_plot)
+
 
 plt1 = ggplot(telemetry_df, aes(x="X", y="Y")) + geom_point()
+ggsave(filename="track.png", plot=plt1)
+plots_anim = PlotnineAnimation(plots, interval=0.1, repeat=500)
+plots_anim.save("animation.gif")
