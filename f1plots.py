@@ -61,5 +61,5 @@ for index, row in telemetry_df.iterrows():
 
 plt1 = ggplot(telemetry_df, aes(x="X", y="Y")) + geom_point()
 ggsave(filename="track.png", plot=plt1)
-plots_anim = PlotnineAnimation(plots, interval=0.1, repeat=500)
+plots_anim = PlotnineAnimation(plots, interval=0.0001, repeat=500)
 plots_anim.save("animation.gif")
