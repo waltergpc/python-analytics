@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 from itertools import repeat
+from era_constants import team_keys
 
 
 base_url = "https://www.cbssports.com/mlb/schedule/"
 
-add_on = "20230626"
+add_on = "20230627"
 
 response = requests.get(base_url + add_on)
 
@@ -43,8 +44,8 @@ for game in tbody_list:
     away_starting_pitcher_cell = 6
     away_team = game.select(construct_team_name_selector(away_team_cell))
     home_team = game.select(construct_team_name_selector(home_team_cell))
-    away_team = away_team[0].a.string
-    home_team = home_team[0].a.string
+    away_team = team_keys[away_team[0].a.string]
+    home_team = team_keys[home_team[0].a.string]
     current_game = away_team + " @ " + home_team
     away_teams.append(away_team)
     home_teams.append(home_team)
@@ -67,9 +68,9 @@ for game in tbody_list:
     away_starting_pitcher_info = game.select(
         construct_starting_pitcher_selector(away_starting_pitcher_cell)
     )
-    away_starting_pitcher = away_starting_pitcher_info[-1].a.string
+    away_starting_pitcher = away_starting_pitcher_info[0].a.string
     away_starting_pitcher_era = (
-        away_starting_pitcher_info[-1]
+        away_starting_pitcher_info[0]
         .span.string.strip()
         .replace("(", "")
         .replace(")", "")
@@ -90,6 +91,7 @@ data = {
 }
 
 pitchers_df = pd.DataFrame(data)
+print(pitchers_df)
 
 
 pitchers_df.to_csv("eras.csv", index=False)
