@@ -7,7 +7,7 @@ from era_constants import team_keys
 
 base_url = "https://www.cbssports.com/mlb/schedule/"
 
-add_on = "20230627"
+add_on = "20230628"
 
 response = requests.get(base_url + add_on)
 
