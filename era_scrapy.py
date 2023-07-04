@@ -9,7 +9,7 @@ base_url = "https://www.cbssports.com/mlb/schedule/"
 
 # Should change date dynamically
 
-add_on = "20230630"
+add_on = "20230704"
 
 response = requests.get(base_url + add_on)
 
